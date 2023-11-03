@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+  shop-api-gateway:
+    environment: 
+     DB_HOST: host.docker.internal
+     EUREKA_HOST: host.docker.internal
+     ZIPKIN_HOST: host.docker.internal
+    build: ./ShopAPIGateway/ShopAPIGateway
+  #  depends_on:
+   #   - service-discovery
+    ports: 
+      - "8081:8081"
+      
+  article:
+    build: ./Article
+    environment: 
+     DB_HOST: host.docker.internal
+     EUREKA_HOST: host.docker.internal
+     BROKER_HOST: host.docker.internal
+     ZIPKIN_HOST: host.docker.internal
+    ports:
+      - "8010:8010"
+   # depends_on:
+    #  - service-discovery
+    
+      
+  customer:
+    build: ./Customer
+    environment: 
+     DB_HOST: host.docker.internal
+     EUREKA_HOST: host.docker.internal
+     ZIPKIN_HOST: host.docker.internal
+     BROKER_HOST: host.docker.internal
+  #  depends_on:
+   #   - service-discovery
+    ports:
+     - "8082:8082"
+    
+  order:
+    build: ./Order
+    environment: 
+     DB_HOST: host.docker.internal
+     EUREKA_HOST: host.docker.internal
+     BROKER_HOST: host.docker.internal
+     ZIPKIN_HOST: host.docker.internal
+    ports:
+     - "8083:8083"
+  #  depends_on:
+   #  - service-discovery
+     
+  shop: 
+    build: ./Shop
+    environment: 
+     DB_HOST: host.docker.internal
+     EUREKA_HOST: host.docker.internal
+     SHOP_HOST: host.docker.internal
+     ZIPKIN_HOST: host.docker.internal
+     BROKER_HOST: host.docker.internal
+     ARTICLE: host.docker.internal
+     CUSTOMER: host.docker.internal
+     ORDER: host.docker.internal
+   # depends_on:
+    #  - service-discovery
+    ports: 
+      - "8020:8020" 
+     
+  #service-discovery:
+   # build: ./ServiceDiscovery
+    #ports:
+     # - "8761:8761"
+  
